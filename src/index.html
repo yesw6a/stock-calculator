@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <title>存量激励计算器</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="page-container">
+      <div class="calculator">
+        <div class="role-selector">
+          <select id="roleSelect">
+            <option value="装维">装维</option>
+            <option value="非装维">非装维</option>
+          </select>
+        </div>
+        <div class="tabs">
+          <button class="tab active" data-tab="tiZhi">提值计算</button>
+          <button class="tab" data-tab="jiaBao">加包计算</button>
+          <div class="tab-indicator"></div>
+        </div>
+
+        <div class="content-wrapper">
+          <div class="content-slider">
+            <div id="tiZhi" class="calculator-content active">
+              <h1 class="title">提值佣金计算器</h1>
+
+              <div class="input-group">
+                <label for="amount">提值金额</label>
+                <input
+                  type="number"
+                  id="amount"
+                  min="0"
+                  step="1"
+                  placeholder="请输入提值金额"
+                  inputmode="decimal"
+                  pattern="[0-9]*"
+                />
+                <div id="amount-error" class="error">请输入有效的提值金额</div>
+              </div>
+
+              <div class="input-group">
+                <label for="package">提值套餐价值</label>
+                <input
+                  type="number"
+                  id="package"
+                  min="0"
+                  step="1"
+                  placeholder="请输入套餐价值"
+                  inputmode="decimal"
+                  pattern="[0-9]*"
+                />
+                <div id="package-error" class="error">请输入有效的套餐价值</div>
+              </div>
+
+              <button onclick="calculate('tiZhi')" id="calcButton">计算佣金</button>
+
+              <div class="result">
+                <div class="result-item">
+                  <span>合计佣金</span>
+                  <span id="result">0</span>
+                </div>
+                <div class="result-item">
+                  <span>佣金倍数</span>
+                  <span id="multiple">0 倍</span>
+                </div>
+              </div>
+              <div id="tiZhiTip" class="tip-message">已包含达量1倍激励</div>
+            </div>
+
+            <div id="jiaBao" class="calculator-content">
+              <h1 class="title">加包佣金计算器</h1>
+
+              <div class="input-group">
+                <label for="jiaBaoAmount">提值金额</label>
+                <input
+                  type="number"
+                  id="jiaBaoAmount"
+                  min="0"
+                  step="1"
+                  placeholder="请输入提值金额"
+                  inputmode="decimal"
+                  pattern="[0-9]*"
+                />
+                <div id="jiaBaoAmount-error" class="error">请输入有效的提值金额</div>
+              </div>
+
+              <div class="input-group">
+                <label for="newPackage">新套餐价值</label>
+                <input
+                  type="number"
+                  id="newPackage"
+                  min="0"
+                  step="1"
+                  placeholder="请输入新套餐价值"
+                  inputmode="decimal"
+                  pattern="[0-9]*"
+                />
+                <div id="newPackage-error" class="error">请输入有效的套餐价值</div>
+              </div>
+
+              <button onclick="calculate('jiaBao')" id="calcButtonJiaBao">计算佣金</button>
+
+              <div class="result">
+                <div class="result-item">
+                  <span>合计佣金</span>
+                  <span id="resultJiaBao">0</span>
+                </div>
+                <div class="result-item">
+                  <span>佣金倍数</span>
+                  <span id="multipleJiaBao">0 倍</span>
+                </div>
+              </div>
+              <div id="jiaBaoTip" class="tip-message">已包含达量1倍激励</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer class="copyright">
+      <div class="author">制作人：吴欢庚 © <span id="currentYear"></span></div>
+      <div class="warning">禁止盗版，违者必究。</div>
+    </footer>
+
+    <script type="module" src="/script.js"></script>
+  </body>
+</html>
