@@ -95,8 +95,16 @@ function calculate(type) {
 }
 
 function calculateTiZhi() {
-  const amount = parseFloat(document.getElementById('amount').value);
-  const packageValue = parseFloat(document.getElementById('package').value);
+  const amountInput = document.getElementById('amount');
+  const packageInput = document.getElementById('package');
+
+  // 检查输入是否为空
+  if (!amountInput.value || !packageInput.value) {
+    return;
+  }
+
+  const amount = parseFloat(amountInput.value);
+  const packageValue = parseFloat(packageInput.value);
   const currentRole = document.getElementById('roleSelect').value;
 
   const isAmountValid = validateInput(amount, 'amount-error');
@@ -111,7 +119,11 @@ function calculateTiZhi() {
 
   let commission;
   if (currentRole === '非装维') {
-    commission = amount * baseMultiplier + packageValue * packageMultiplier + 40;
+    const fttrChecked = document.getElementById('fttrCheckbox').checked;
+    commission = amount * baseMultiplier + packageValue * packageMultiplier;
+    if (fttrChecked) {
+      commission += 40;
+    }
   } else {
     commission = amount * baseMultiplier + packageValue * packageMultiplier;
   }
@@ -125,8 +137,16 @@ function calculateTiZhi() {
 }
 
 function calculateJiaBao() {
-  const amount = parseFloat(document.getElementById('jiaBaoAmount').value);
-  const newPackageValue = parseFloat(document.getElementById('newPackage').value);
+  const amountInput = document.getElementById('jiaBaoAmount');
+  const newPackageInput = document.getElementById('newPackage');
+
+  // 检查输入是否为空
+  if (!amountInput.value || !newPackageInput.value) {
+    return;
+  }
+
+  const amount = parseFloat(amountInput.value);
+  const newPackageValue = parseFloat(newPackageInput.value);
   const currentRole = document.getElementById('roleSelect').value;
 
   const isAmountValid = validateInput(amount, 'jiaBaoAmount-error');
@@ -141,7 +161,11 @@ function calculateJiaBao() {
 
   let commission;
   if (currentRole === '非装维') {
-    commission = amount * baseMultiplier + newPackageValue * packageMultiplier + 40;
+    const fttrChecked = document.getElementById('fttrCheckboxJiaBao').checked;
+    commission = amount * baseMultiplier + newPackageValue * packageMultiplier;
+    if (fttrChecked) {
+      commission += 40;
+    }
   } else {
     commission = amount * baseMultiplier + newPackageValue * packageMultiplier;
   }
@@ -187,6 +211,14 @@ function calculateJiaBao() {
 });
 
 // 优化移动端点击延迟
+document.getElementById('calcButton').addEventListener('click', function () {
+  calculate('tiZhi');
+});
+
+document.getElementById('calcButtonJiaBao').addEventListener('click', function () {
+  calculate('jiaBao');
+});
+
 document.getElementById('calcButton').addEventListener('touchstart', function (e) {
   e.preventDefault();
   calculate('tiZhi');
@@ -206,6 +238,18 @@ if (savedRole) {
   roleSelect.value = savedRole;
 }
 
+// 从localStorage加载FTTR勾选状态
+const fttrCheckbox = document.getElementById('fttrCheckbox');
+const fttrCheckboxJiaBao = document.getElementById('fttrCheckboxJiaBao');
+const fttrOption = document.getElementById('fttrOption');
+const fttrOptionJiaBao = document.getElementById('fttrOptionJiaBao');
+
+// 默认勾选
+fttrCheckbox.checked = true;
+fttrCheckboxJiaBao.checked = true;
+fttrOption.classList.add('checked');
+fttrOptionJiaBao.classList.add('checked');
+
 // 更新提示信息显示状态和内容
 function updateTipVisibility() {
   const currentRole = document.getElementById('roleSelect').value;
@@ -217,11 +261,22 @@ function updateTipVisibility() {
     jiaBaoTip.textContent = '已包含达量1倍激励';
     tiZhiTip.classList.remove('show');
     jiaBaoTip.classList.remove('show');
+    fttrOption.style.display = 'none';
+    fttrOptionJiaBao.style.display = 'none';
   } else {
-    tiZhiTip.textContent = '已包含40元FTTR激励';
-    jiaBaoTip.textContent = '已包含40元FTTR激励';
-    tiZhiTip.classList.add('show');
-    jiaBaoTip.classList.add('show');
+    const fttrChecked = document.getElementById('fttrCheckbox').checked;
+    fttrOption.style.display = 'flex';
+    fttrOptionJiaBao.style.display = 'flex';
+
+    if (fttrChecked) {
+      tiZhiTip.textContent = '已包含40元FTTR激励';
+      jiaBaoTip.textContent = '已包含40元FTTR激励';
+      tiZhiTip.classList.add('show');
+      jiaBaoTip.classList.add('show');
+    } else {
+      tiZhiTip.classList.remove('show');
+      jiaBaoTip.classList.remove('show');
+    }
   }
 }
 
@@ -243,6 +298,56 @@ roleSelect.addEventListener('change', function () {
     if (hasCalculatedJiaBao) {
       calculateJiaBao();
     }
+  }
+});
+
+// FTTR勾选框变化事件
+fttrCheckbox.addEventListener('change', function () {
+  fttrCheckboxJiaBao.checked = this.checked;
+
+  // 更新选中态样式
+  if (this.checked) {
+    fttrOption.classList.add('checked');
+    fttrOptionJiaBao.classList.add('checked');
+  } else {
+    fttrOption.classList.remove('checked');
+    fttrOptionJiaBao.classList.remove('checked');
+  }
+
+  updateTipVisibility();
+  // 获取当前激活的标签页并触发计算
+  const activeTab = document.querySelector('.tab.active').getAttribute('data-tab');
+  if (activeTab === 'tiZhi') {
+    calculateTiZhi();
+    hasCalculatedTiZhi = true;
+  } else {
+    calculateJiaBao();
+    hasCalculatedJiaBao = true;
+  }
+});
+
+// 加包计算器FTTR勾选框变化事件
+fttrCheckboxJiaBao.addEventListener('change', function () {
+  fttrCheckbox.checked = this.checked;
+
+  // 更新选中态样式
+  if (this.checked) {
+    fttrOption.classList.add('checked');
+    fttrOptionJiaBao.classList.add('checked');
+  } else {
+    fttrOption.classList.remove('checked');
+    fttrOptionJiaBao.classList.remove('checked');
+  }
+
+  updateTipVisibility();
+  // 获取当前激活的标签页并触发计算
+  const activeTab = document.querySelector('.tab.active').getAttribute('data-tab');
+  if (activeTab === 'tiZhi') {
+    calculateTiZhi();
+    hasCalculatedTiZhi = true;
+  } else {
+    calculateJiaBao();
+    hasCalculatedJiaBao = true;
   }
 });
 
@@ -275,3 +380,34 @@ const buttons = document.getElementsByTagName('button');
 for (const button of buttons) {
   button.addEventListener('click', createRipple);
 }
+
+// 为FTTR选项标签添加涟漪效果
+const fttrLabels = document.querySelectorAll('.fttr-option');
+fttrLabels.forEach((label) => {
+  label.addEventListener('click', function (e) {
+    const ripple = document.createElement('span');
+    const rect = this.getBoundingClientRect();
+
+    const diameter = Math.max(this.clientWidth, this.clientHeight);
+    const radius = diameter / 2;
+
+    ripple.style.width = ripple.style.height = `${diameter}px`;
+    ripple.style.left = `${e.clientX - rect.left - radius}px`;
+    ripple.style.top = `${e.clientY - rect.top - radius}px`;
+
+    ripple.classList.add('ripple');
+
+    const rippleContainer = this.getElementsByClassName('ripple')[0];
+
+    if (rippleContainer) {
+      rippleContainer.remove();
+    }
+
+    this.appendChild(ripple);
+
+    // 300ms后移除涟漪效果
+    setTimeout(() => {
+      ripple.remove();
+    }, 600);
+  });
+});
