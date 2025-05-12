@@ -277,6 +277,7 @@ body {
 
 .input-group {
   margin: 1.25rem 0;
+  position: relative;
 }
 
 label {
@@ -287,13 +288,28 @@ label {
   font-size: 0.95rem;
 }
 
+.error-input {
+  border-color: #e53e3e !important;
+  animation: shake 0.4s ease-in-out;
+}
+
+.error-input::placeholder {
+  color: #e53e3e;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
 input {
   width: 100%;
   padding: 0.875rem;
   border: 2px solid #e2e8f0;
   border-radius: 8px;
   font-size: 1.1rem;
-  transition: border-color 0.3s;
+  transition: border-color 0.3s, transform 0.2s;
   box-sizing: border-box;
   -webkit-appearance: none;
   background-color: #fff;
@@ -305,14 +321,24 @@ input:focus {
   border-color: #2c5282;
 }
 
-input[type='number'] {
-  -moz-appearance: textfield;
+input.focused {
+  transform: scale(1.01);
 }
 
+/* 输入框标签动画 */
+.input-group {
+  position: relative;
+}
+
+/* 移除不需要的验证样式 */
 input[type='number']::-webkit-outer-spin-button,
 input[type='number']::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
 }
 
 button {

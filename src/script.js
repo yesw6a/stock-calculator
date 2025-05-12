@@ -97,12 +97,26 @@ function calculate(type) {
 function calculateTiZhi() {
   const amountInput = document.getElementById('amount');
   const packageInput = document.getElementById('package');
-
-  // 检查输入是否为空
-  if (!amountInput.value || !packageInput.value) {
-    return;
+  
+  // 检查输入是否为空，并标红提示
+  let isValid = true;
+  
+  if (!amountInput.value) {
+    amountInput.classList.add('error-input');
+    amountInput.setAttribute('placeholder', '请输入提值金额');
+    isValid = false;
   }
-
+  
+  if (!packageInput.value) {
+    packageInput.classList.add('error-input');
+    packageInput.setAttribute('placeholder', '请输入套餐价值');
+    isValid = false;
+  }
+  
+  if (!isValid) {
+    return false;
+  }
+  
   const amount = parseFloat(amountInput.value);
   const packageValue = parseFloat(packageInput.value);
   const currentRole = document.getElementById('roleSelect').value;
@@ -111,7 +125,7 @@ function calculateTiZhi() {
   const isPackageValid = validateInput(packageValue, 'package-error');
 
   if (!isAmountValid || !isPackageValid) {
-    return;
+    return false;
   }
 
   const baseMultiplier = amount >= 60 ? 4.5 : 2.5;
@@ -134,17 +148,32 @@ function calculateTiZhi() {
   document.getElementById('multiple').textContent = amount > 0 ? `${multiple.toFixed(2)} 倍` : '金额无效';
 
   document.activeElement.blur();
+  return true;
 }
 
 function calculateJiaBao() {
   const amountInput = document.getElementById('jiaBaoAmount');
   const newPackageInput = document.getElementById('newPackage');
-
-  // 检查输入是否为空
-  if (!amountInput.value || !newPackageInput.value) {
-    return;
+  
+  // 检查输入是否为空，并标红提示
+  let isValid = true;
+  
+  if (!amountInput.value) {
+    amountInput.classList.add('error-input');
+    amountInput.setAttribute('placeholder', '请输入提值金额');
+    isValid = false;
   }
-
+  
+  if (!newPackageInput.value) {
+    newPackageInput.classList.add('error-input');
+    newPackageInput.setAttribute('placeholder', '请输入新套餐价值');
+    isValid = false;
+  }
+  
+  if (!isValid) {
+    return false;
+  }
+  
   const amount = parseFloat(amountInput.value);
   const newPackageValue = parseFloat(newPackageInput.value);
   const currentRole = document.getElementById('roleSelect').value;
@@ -153,7 +182,7 @@ function calculateJiaBao() {
   const isNewPackageValid = validateInput(newPackageValue, 'newPackage-error');
 
   if (!isAmountValid || !isNewPackageValid) {
-    return;
+    return false;
   }
 
   const baseMultiplier = amount >= 60 ? 4 : 2;
@@ -176,15 +205,22 @@ function calculateJiaBao() {
   document.getElementById('multipleJiaBao').textContent = amount > 0 ? `${multiple.toFixed(2)} 倍` : '金额无效';
 
   document.activeElement.blur();
+  return true;
 }
 
 // 添加输入事件监听器
 ['amount', 'package'].forEach((id) => {
   const input = document.getElementById(id);
+  const originalPlaceholder = input.getAttribute('placeholder');
+  
   input.addEventListener('input', function () {
-    if (validateInput(this.value, `${id}-error`)) {
-      validateInput(this.value, `${id}-error`);
+    // 当用户开始输入时，清除错误状态
+    if (this.value) {
+      this.classList.remove('error-input');
+      // 恢复原始placeholder
+      this.setAttribute('placeholder', originalPlaceholder);
     }
+    validateInput(this.value, `${id}-error`);
   });
 
   input.addEventListener('keypress', function (e) {
@@ -192,21 +228,55 @@ function calculateJiaBao() {
       calculate('tiZhi');
     }
   });
+  
+  // 添加焦点事件
+  input.addEventListener('focus', function() {
+    this.classList.add('focused');
+    // 聚焦时也清除错误状态
+    if (this.value) {
+      this.classList.remove('error-input');
+      this.setAttribute('placeholder', originalPlaceholder);
+    }
+  });
+  
+  input.addEventListener('blur', function() {
+    this.classList.remove('focused');
+  });
 });
 
 // 加包计算器的输入监听
 ['jiaBaoAmount', 'newPackage'].forEach((id) => {
   const input = document.getElementById(id);
+  const originalPlaceholder = input.getAttribute('placeholder');
+  
   input.addEventListener('input', function () {
-    if (validateInput(this.value, `${id}-error`)) {
-      validateInput(this.value, `${id}-error`);
+    // 当用户开始输入时，清除错误状态
+    if (this.value) {
+      this.classList.remove('error-input');
+      // 恢复原始placeholder
+      this.setAttribute('placeholder', originalPlaceholder);
     }
+    validateInput(this.value, `${id}-error`);
   });
 
   input.addEventListener('keypress', function (e) {
     if (e.key === 'Enter') {
       calculate('jiaBao');
     }
+  });
+  
+  // 添加焦点事件
+  input.addEventListener('focus', function() {
+    this.classList.add('focused');
+    // 聚焦时也清除错误状态
+    if (this.value) {
+      this.classList.remove('error-input');
+      this.setAttribute('placeholder', originalPlaceholder);
+    }
+  });
+  
+  input.addEventListener('blur', function() {
+    this.classList.remove('focused');
   });
 });
 
