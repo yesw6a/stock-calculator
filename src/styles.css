@@ -290,23 +290,25 @@ label {
 
 .error-input {
   border-color: #e53e3e !important;
+  border-width: 1px !important;
   animation: shake 0.4s ease-in-out;
 }
 
 .error-input::placeholder {
   color: #e53e3e;
+  opacity: 0.9;
 }
 
 @keyframes shake {
   0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-5px); }
-  75% { transform: translateX(5px); }
+  25% { transform: translateX(-3px); }
+  75% { transform: translateX(3px); }
 }
 
 input {
   width: 100%;
   padding: 0.875rem;
-  border: 2px solid #e2e8f0;
+  border: 1px solid #e2e8f0;
   border-radius: 8px;
   font-size: 1.1rem;
   transition: border-color 0.3s, transform 0.2s;

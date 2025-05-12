@@ -374,7 +374,7 @@ roleSelect.addEventListener('change', function () {
 // FTTR勾选框变化事件
 fttrCheckbox.addEventListener('change', function () {
   fttrCheckboxJiaBao.checked = this.checked;
-
+  
   // 更新选中态样式
   if (this.checked) {
     fttrOption.classList.add('checked');
@@ -383,23 +383,25 @@ fttrCheckbox.addEventListener('change', function () {
     fttrOption.classList.remove('checked');
     fttrOptionJiaBao.classList.remove('checked');
   }
-
+  
   updateTipVisibility();
-  // 获取当前激活的标签页并触发计算
+  // 只在已经进行过计算时才重新计算
   const activeTab = document.querySelector('.tab.active').getAttribute('data-tab');
   if (activeTab === 'tiZhi') {
-    calculateTiZhi();
-    hasCalculatedTiZhi = true;
+    if (hasCalculatedTiZhi) {
+      calculateTiZhi();
+    }
   } else {
-    calculateJiaBao();
-    hasCalculatedJiaBao = true;
+    if (hasCalculatedJiaBao) {
+      calculateJiaBao();
+    }
   }
 });
 
 // 加包计算器FTTR勾选框变化事件
 fttrCheckboxJiaBao.addEventListener('change', function () {
   fttrCheckbox.checked = this.checked;
-
+  
   // 更新选中态样式
   if (this.checked) {
     fttrOption.classList.add('checked');
@@ -408,16 +410,18 @@ fttrCheckboxJiaBao.addEventListener('change', function () {
     fttrOption.classList.remove('checked');
     fttrOptionJiaBao.classList.remove('checked');
   }
-
+  
   updateTipVisibility();
-  // 获取当前激活的标签页并触发计算
+  // 只在已经进行过计算时才重新计算
   const activeTab = document.querySelector('.tab.active').getAttribute('data-tab');
   if (activeTab === 'tiZhi') {
-    calculateTiZhi();
-    hasCalculatedTiZhi = true;
+    if (hasCalculatedTiZhi) {
+      calculateTiZhi();
+    }
   } else {
-    calculateJiaBao();
-    hasCalculatedJiaBao = true;
+    if (hasCalculatedJiaBao) {
+      calculateJiaBao();
+    }
   }
 });
 
