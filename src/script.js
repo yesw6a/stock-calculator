@@ -113,7 +113,7 @@ function calculateTiZhi() {
   
   if (!packageInput.value) {
     packageInput.classList.add('error-input');
-    packageInput.setAttribute('placeholder', '请输入套餐价值');
+    packageInput.setAttribute('placeholder', '请输入新套餐价值');
     isValid = false;
   }
   
@@ -216,7 +216,10 @@ function calculateJiaBao() {
 /* 添加输入事件监听器 */
 ['amount', 'package'].forEach((id) => {
   const input = document.getElementById(id);
-  const originalPlaceholder = input.getAttribute('placeholder');
+  let originalPlaceholder = input.getAttribute('placeholder');
+  if (id === 'package') {
+    originalPlaceholder = '请输入新套餐价值';
+  }
   
   input.addEventListener('input', function () {
     /* 当用户开始输入时，清除错误状态 */
