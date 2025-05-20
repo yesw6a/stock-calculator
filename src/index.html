@@ -33,17 +33,17 @@
               <h1 class="title">提值佣金计算器</h1>
 
               <div class="input-group">
-                <label for="amount">提值金额</label>
+                <label for="originPackage">原套餐价值</label>
                 <input
                   type="number"
-                  id="amount"
+                  id="originPackage"
                   min="0"
                   step="1"
-                  placeholder="请输入提值金额"
+                  placeholder="请输入原套餐价值"
                   inputmode="decimal"
                   pattern="[0-9]*"
                 />
-                <div id="amount-error" class="error">请输入有效的提值金额</div>
+                <div id="originPackage-error" class="error">请输入有效的原套餐价值</div>
               </div>
 
               <div class="input-group">
@@ -58,6 +58,11 @@
                   pattern="[0-9]*"
                 />
                 <div id="package-error" class="error">请输入有效的新套餐价值</div>
+              </div>
+
+              <div class="input-group">
+                <label>提值金额</label>
+                <input type="text" id="amount" readonly placeholder="自动计算" />
               </div>
 
               <div id="fttrOption" class="fttr-option">
@@ -84,17 +89,17 @@
               <h1 class="title">加包佣金计算器</h1>
 
               <div class="input-group">
-                <label for="jiaBaoAmount">提值金额</label>
+                <label for="jiaBaoOriginPackage">原套餐价值</label>
                 <input
                   type="number"
-                  id="jiaBaoAmount"
+                  id="jiaBaoOriginPackage"
                   min="0"
                   step="1"
-                  placeholder="请输入提值金额"
+                  placeholder="请输入原套餐价值"
                   inputmode="decimal"
                   pattern="[0-9]*"
                 />
-                <div id="jiaBaoAmount-error" class="error">请输入有效的提值金额</div>
+                <div id="jiaBaoOriginPackage-error" class="error">请输入有效的原套餐价值</div>
               </div>
 
               <div class="input-group">
@@ -109,6 +114,11 @@
                   pattern="[0-9]*"
                 />
                 <div id="newPackage-error" class="error">请输入有效的套餐价值</div>
+              </div>
+
+              <div class="input-group">
+                <label>提值金额</label>
+                <input type="text" id="jiaBaoAmount" readonly placeholder="自动计算" />
               </div>
 
               <div id="fttrOptionJiaBao" class="fttr-option">

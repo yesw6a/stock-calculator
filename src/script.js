@@ -112,15 +112,16 @@ function calculateNewPackageCommission(newPackageValue) {
 
 /* 提值计算逻辑 */
 function calculateTiZhi() {
-  const amountInput = document.getElementById('amount');
+  const originPackageInput = document.getElementById('originPackage');
   const packageInput = document.getElementById('package');
+  const amountInput = document.getElementById('amount');
   
   /* 检查输入是否为空，并标红提示 */
   let isValid = true;
   
-  if (!amountInput.value) {
-    amountInput.classList.add('error-input');
-    amountInput.setAttribute('placeholder', '请输入提值金额');
+  if (!originPackageInput.value) {
+    originPackageInput.classList.add('error-input');
+    originPackageInput.setAttribute('placeholder', '请输入原套餐价值');
     isValid = false;
   }
   
@@ -131,17 +132,20 @@ function calculateTiZhi() {
   }
   
   if (!isValid) {
+    amountInput.value = '';
     return false;
   }
   
-  const amount = parseFloat(amountInput.value);
+  const originPackageValue = parseFloat(originPackageInput.value);
   const packageValue = parseFloat(packageInput.value);
+  const amount = packageValue - originPackageValue;
+  amountInput.value = isNaN(amount) ? '' : amount;
   const currentRole = document.getElementById('roleSelect').value;
 
-  const isAmountValid = validateInput(amount, 'amount-error');
+  const isOriginValid = validateInput(originPackageValue, 'originPackage-error');
   const isPackageValid = validateInput(packageValue, 'package-error');
-
-  if (!isAmountValid || !isPackageValid) {
+  const isAmountValid = !isNaN(amount) && amount >= 0;
+  if (!isOriginValid || !isPackageValid || !isAmountValid) {
     return false;
   }
 
@@ -189,15 +193,16 @@ function calculateTiZhi() {
 
 /* 加包计算逻辑 */
 function calculateJiaBao() {
-  const amountInput = document.getElementById('jiaBaoAmount');
+  const originInput = document.getElementById('jiaBaoOriginPackage');
   const newPackageInput = document.getElementById('newPackage');
+  const amountInput = document.getElementById('jiaBaoAmount');
   
   /* 检查输入是否为空，并标红提示 */
   let isValid = true;
   
-  if (!amountInput.value) {
-    amountInput.classList.add('error-input');
-    amountInput.setAttribute('placeholder', '请输入提值金额');
+  if (!originInput.value) {
+    originInput.classList.add('error-input');
+    originInput.setAttribute('placeholder', '请输入原套餐价值');
     isValid = false;
   }
   
@@ -208,17 +213,20 @@ function calculateJiaBao() {
   }
   
   if (!isValid) {
+    amountInput.value = '';
     return false;
   }
   
-  const amount = parseFloat(amountInput.value);
+  const originValue = parseFloat(originInput.value);
   const newPackageValue = parseFloat(newPackageInput.value);
+  const amount = newPackageValue - originValue;
+  amountInput.value = isNaN(amount) ? '' : amount;
   const currentRole = document.getElementById('roleSelect').value;
 
-  const isAmountValid = validateInput(amount, 'jiaBaoAmount-error');
+  const isOriginValid = validateInput(originValue, 'jiaBaoOriginPackage-error');
   const isNewPackageValid = validateInput(newPackageValue, 'newPackage-error');
-
-  if (!isAmountValid || !isNewPackageValid) {
+  const isAmountValid = !isNaN(amount) && amount >= 0;
+  if (!isOriginValid || !isNewPackageValid || !isAmountValid) {
     return false;
   }
 
@@ -265,13 +273,15 @@ function calculateJiaBao() {
 }
 
 /* 添加输入事件监听器 */
-['amount', 'package'].forEach((id) => {
+['originPackage', 'package'].forEach((id) => {
   const input = document.getElementById(id);
   let originalPlaceholder = input.getAttribute('placeholder');
   if (id === 'package') {
     originalPlaceholder = '请输入新套餐价值';
   }
-  
+  if (id === 'originPackage') {
+    originalPlaceholder = '请输入原套餐价值';
+  }
   input.addEventListener('input', function () {
     /* 当用户开始输入时，清除错误状态 */
     if (this.value) {
@@ -279,7 +289,14 @@ function calculateJiaBao() {
       /* 恢复原始placeholder */
       this.setAttribute('placeholder', originalPlaceholder);
     }
-    validateInput(this.value, `${id}-error`);
+    // 只自动计算提值金额，不自动算佣金
+    const originPackageInput = document.getElementById('originPackage');
+    const packageInput = document.getElementById('package');
+    const amountInput = document.getElementById('amount');
+    const originPackageValue = parseFloat(originPackageInput.value);
+    const packageValue = parseFloat(packageInput.value);
+    const amount = packageValue - originPackageValue;
+    amountInput.value = isNaN(amount) ? '' : amount;
   });
 
   input.addEventListener('keypress', function (e) {
@@ -304,10 +321,15 @@ function calculateJiaBao() {
 });
 
 /* 加包计算器的输入监听 */
-['jiaBaoAmount', 'newPackage'].forEach((id) => {
+['jiaBaoOriginPackage', 'newPackage'].forEach((id) => {
   const input = document.getElementById(id);
-  const originalPlaceholder = input.getAttribute('placeholder');
-  
+  let originalPlaceholder = input.getAttribute('placeholder');
+  if (id === 'newPackage') {
+    originalPlaceholder = '请输入新套餐价值';
+  }
+  if (id === 'jiaBaoOriginPackage') {
+    originalPlaceholder = '请输入原套餐价值';
+  }
   input.addEventListener('input', function () {
     /* 当用户开始输入时，清除错误状态 */
     if (this.value) {
@@ -315,7 +337,14 @@ function calculateJiaBao() {
       /* 恢复原始placeholder */
       this.setAttribute('placeholder', originalPlaceholder);
     }
-    validateInput(this.value, `${id}-error`);
+    // 只自动计算提值金额，不自动算佣金
+    const originInput = document.getElementById('jiaBaoOriginPackage');
+    const newPackageInput = document.getElementById('newPackage');
+    const amountInput = document.getElementById('jiaBaoAmount');
+    const originValue = parseFloat(originInput.value);
+    const newPackageValue = parseFloat(newPackageInput.value);
+    const amount = newPackageValue - originValue;
+    amountInput.value = isNaN(amount) ? '' : amount;
   });
 
   input.addEventListener('keypress', function (e) {
