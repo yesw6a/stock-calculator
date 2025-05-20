@@ -153,6 +153,7 @@ function calculateTiZhi() {
   const packageMultiplier = 0.5;
 
   let commission, commissionWithoutExtra, usedNewPackageCommission = false;
+  let extraIncentive = 0;
   if (currentRole === '非装维') {
     const fttrChecked = document.getElementById('fttrCheckbox').checked;
     commissionWithoutExtra = amount * baseMultiplier + packageValue * packageMultiplier;
@@ -162,9 +163,9 @@ function calculateTiZhi() {
       usedNewPackageCommission = true;
     } else {
       commission = commissionWithoutExtra;
-      if (fttrChecked) {
-        commission += EXTRA_INCENTIVE.非装维.fttrChecked;
-      }
+    }
+    if (fttrChecked) {
+      extraIncentive = EXTRA_INCENTIVE.非装维.fttrChecked;
     }
   } else {
     commissionWithoutExtra = amount * baseMultiplier + packageValue * packageMultiplier;
@@ -178,12 +179,13 @@ function calculateTiZhi() {
   }
 
   let multiple;
+  let finalCommission = commission + extraIncentive;
   if (usedNewPackageCommission) {
     multiple = commission / amount;
-    document.getElementById('result').innerHTML = `${formatNumber(commission.toFixed(1))}<span class="max-incentive">（已达最大激励）</span>`;
+    document.getElementById('result').innerHTML = `${formatNumber(finalCommission.toFixed(1))}<span class=\"max-incentive\">（已达最大激励）</span>`;
   } else {
     multiple = commission / amount;
-    document.getElementById('result').textContent = formatNumber(commission.toFixed(1));
+    document.getElementById('result').textContent = formatNumber(finalCommission.toFixed(1));
   }
   document.getElementById('multiple').textContent = amount > 0 ? `${multiple.toFixed(2)} 倍` : '金额无效';
 
@@ -234,6 +236,7 @@ function calculateJiaBao() {
   const packageMultiplier = 0.25;
 
   let commission, commissionWithoutExtra, usedNewPackageCommission = false;
+  let extraIncentive = 0;
   if (currentRole === '非装维') {
     const fttrChecked = document.getElementById('fttrCheckboxJiaBao').checked;
     commissionWithoutExtra = amount * baseMultiplier + newPackageValue * packageMultiplier;
@@ -243,9 +246,9 @@ function calculateJiaBao() {
       usedNewPackageCommission = true;
     } else {
       commission = commissionWithoutExtra;
-      if (fttrChecked) {
-        commission += EXTRA_INCENTIVE.非装维.fttrChecked;
-      }
+    }
+    if (fttrChecked) {
+      extraIncentive = EXTRA_INCENTIVE.非装维.fttrChecked;
     }
   } else {
     commissionWithoutExtra = amount * baseMultiplier + newPackageValue * packageMultiplier;
@@ -259,12 +262,13 @@ function calculateJiaBao() {
   }
 
   let multiple;
+  let finalCommission = commission + extraIncentive;
   if (usedNewPackageCommission) {
     multiple = commission / amount;
-    document.getElementById('resultJiaBao').innerHTML = `<span class="max-incentive">${formatNumber(commission.toFixed(1))}（已达最大激励）</span>`;
+    document.getElementById('resultJiaBao').innerHTML = `<span class=\"max-incentive\">${formatNumber(finalCommission.toFixed(1))}（已达最大激励）</span>`;
   } else {
     multiple = commission / amount;
-    document.getElementById('resultJiaBao').textContent = formatNumber(commission.toFixed(1));
+    document.getElementById('resultJiaBao').textContent = formatNumber(finalCommission.toFixed(1));
   }
   document.getElementById('multipleJiaBao').textContent = amount > 0 ? `${multiple.toFixed(2)} 倍` : '金额无效';
 
