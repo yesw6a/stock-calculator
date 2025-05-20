@@ -489,3 +489,7 @@ button:active {
     font-size: 1rem;
   }
 }
+
+.max-incentive {
+  color: #e53e3e !important;
+}

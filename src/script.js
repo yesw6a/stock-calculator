@@ -25,6 +25,14 @@ document.addEventListener(
   false
 );
 
+/** 额外激励 */
+export const EXTRA_INCENTIVE = {
+  非装维:{
+    /** 加装FTTR */
+    fttrChecked: 40
+  }
+};
+
 let startX = 0;
 let currentX = 0;
 let isDragging = false;
@@ -97,6 +105,11 @@ function calculate(type) {
   }
 }
 
+/* 新套餐佣金计算公式 */
+function calculateNewPackageCommission(newPackageValue) {
+  return newPackageValue * 3.5;
+}
+
 /* 提值计算逻辑 */
 function calculateTiZhi() {
   const amountInput = document.getElementById('amount');
@@ -135,20 +148,39 @@ function calculateTiZhi() {
   const baseMultiplier = amount >= 60 ? 4.5 : 2.5;
   const packageMultiplier = 0.5;
 
-  let commission;
+  let commission, commissionWithoutExtra, usedNewPackageCommission = false;
   if (currentRole === '非装维') {
     const fttrChecked = document.getElementById('fttrCheckbox').checked;
-    commission = amount * baseMultiplier + packageValue * packageMultiplier;
-    if (fttrChecked) {
-      commission += 40;
+    commissionWithoutExtra = amount * baseMultiplier + packageValue * packageMultiplier;
+    const newPackageCommission = calculateNewPackageCommission(packageValue);
+    if (commissionWithoutExtra > newPackageCommission) {
+      commission = newPackageCommission;
+      usedNewPackageCommission = true;
+    } else {
+      commission = commissionWithoutExtra;
+      if (fttrChecked) {
+        commission += EXTRA_INCENTIVE.非装维.fttrChecked;
+      }
     }
   } else {
-    commission = amount * baseMultiplier + packageValue * packageMultiplier;
+    commissionWithoutExtra = amount * baseMultiplier + packageValue * packageMultiplier;
+    const newPackageCommission = calculateNewPackageCommission(packageValue);
+    if (commissionWithoutExtra > newPackageCommission) {
+      commission = newPackageCommission;
+      usedNewPackageCommission = true;
+    } else {
+      commission = commissionWithoutExtra;
+    }
   }
 
-  const multiple = commission / amount;
-
-  document.getElementById('result').textContent = formatNumber(commission.toFixed(1));
+  let multiple;
+  if (usedNewPackageCommission) {
+    multiple = commission / amount;
+    document.getElementById('result').innerHTML = `${formatNumber(commission.toFixed(1))}<span class="max-incentive">（已达最大激励）</span>`;
+  } else {
+    multiple = commission / amount;
+    document.getElementById('result').textContent = formatNumber(commission.toFixed(1));
+  }
   document.getElementById('multiple').textContent = amount > 0 ? `${multiple.toFixed(2)} 倍` : '金额无效';
 
   document.activeElement.blur();
@@ -193,20 +225,39 @@ function calculateJiaBao() {
   const baseMultiplier = amount >= 60 ? 4 : 2;
   const packageMultiplier = 0.25;
 
-  let commission;
+  let commission, commissionWithoutExtra, usedNewPackageCommission = false;
   if (currentRole === '非装维') {
     const fttrChecked = document.getElementById('fttrCheckboxJiaBao').checked;
-    commission = amount * baseMultiplier + newPackageValue * packageMultiplier;
-    if (fttrChecked) {
-      commission += 40;
+    commissionWithoutExtra = amount * baseMultiplier + newPackageValue * packageMultiplier;
+    const newPackageCommission = calculateNewPackageCommission(newPackageValue);
+    if (commissionWithoutExtra > newPackageCommission) {
+      commission = newPackageCommission;
+      usedNewPackageCommission = true;
+    } else {
+      commission = commissionWithoutExtra;
+      if (fttrChecked) {
+        commission += EXTRA_INCENTIVE.非装维.fttrChecked;
+      }
     }
   } else {
-    commission = amount * baseMultiplier + newPackageValue * packageMultiplier;
+    commissionWithoutExtra = amount * baseMultiplier + newPackageValue * packageMultiplier;
+    const newPackageCommission = calculateNewPackageCommission(newPackageValue);
+    if (commissionWithoutExtra > newPackageCommission) {
+      commission = newPackageCommission;
+      usedNewPackageCommission = true;
+    } else {
+      commission = commissionWithoutExtra;
+    }
   }
 
-  const multiple = commission / amount;
-
-  document.getElementById('resultJiaBao').textContent = formatNumber(commission.toFixed(1));
+  let multiple;
+  if (usedNewPackageCommission) {
+    multiple = commission / amount;
+    document.getElementById('resultJiaBao').innerHTML = `<span class="max-incentive">${formatNumber(commission.toFixed(1))}（已达最大激励）</span>`;
+  } else {
+    multiple = commission / amount;
+    document.getElementById('resultJiaBao').textContent = formatNumber(commission.toFixed(1));
+  }
   document.getElementById('multipleJiaBao').textContent = amount > 0 ? `${multiple.toFixed(2)} 倍` : '金额无效';
 
   document.activeElement.blur();
@@ -347,8 +398,8 @@ function updateTipVisibility() {
     fttrOptionJiaBao.style.display = 'flex';
 
     if (fttrChecked) {
-      tiZhiTip.textContent = '已包含40元FTTR激励';
-      jiaBaoTip.textContent = '已包含40元FTTR激励';
+      tiZhiTip.textContent = `已包含${EXTRA_INCENTIVE.非装维.fttrChecked}元FTTR激励`;
+      jiaBaoTip.textContent = `已包含${EXTRA_INCENTIVE.非装维.fttrChecked}元FTTR激励`;
       tiZhiTip.classList.add('show');
       jiaBaoTip.classList.add('show');
     } else {
