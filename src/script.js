@@ -1,7 +1,7 @@
-// 设置动态年份
+/* 设置动态年份 */
 document.getElementById('currentYear').textContent = new Date().getFullYear();
 
-// 禁用双击缩放
+/* 禁用双击缩放 */
 document.addEventListener(
   'touchstart',
   function (event) {
@@ -36,6 +36,7 @@ let currentTab = 'tiZhi';
 let hasCalculatedTiZhi = false;
 let hasCalculatedJiaBao = false;
 
+/* 更新tab指示器 */
 function updateIndicator() {
   const activeTab = document.querySelector('.tab.active');
   const index = Array.from(tabs).indexOf(activeTab);
@@ -44,6 +45,7 @@ function updateIndicator() {
 
 updateIndicator();
 
+/* 切换tab */
 function switchTab(tabId) {
   if (currentTab === tabId) return;
 
@@ -70,6 +72,7 @@ tabs.forEach((tab) => {
   });
 });
 
+/* 校验输入 */
 function validateInput(value, errorId) {
   const error = document.getElementById(errorId);
   if (isNaN(value) || value < 0) {
@@ -94,11 +97,12 @@ function calculate(type) {
   }
 }
 
+/* 提值计算逻辑 */
 function calculateTiZhi() {
   const amountInput = document.getElementById('amount');
   const packageInput = document.getElementById('package');
   
-  // 检查输入是否为空，并标红提示
+  /* 检查输入是否为空，并标红提示 */
   let isValid = true;
   
   if (!amountInput.value) {
@@ -151,11 +155,12 @@ function calculateTiZhi() {
   return true;
 }
 
+/* 加包计算逻辑 */
 function calculateJiaBao() {
   const amountInput = document.getElementById('jiaBaoAmount');
   const newPackageInput = document.getElementById('newPackage');
   
-  // 检查输入是否为空，并标红提示
+  /* 检查输入是否为空，并标红提示 */
   let isValid = true;
   
   if (!amountInput.value) {
@@ -208,16 +213,16 @@ function calculateJiaBao() {
   return true;
 }
 
-// 添加输入事件监听器
+/* 添加输入事件监听器 */
 ['amount', 'package'].forEach((id) => {
   const input = document.getElementById(id);
   const originalPlaceholder = input.getAttribute('placeholder');
   
   input.addEventListener('input', function () {
-    // 当用户开始输入时，清除错误状态
+    /* 当用户开始输入时，清除错误状态 */
     if (this.value) {
       this.classList.remove('error-input');
-      // 恢复原始placeholder
+      /* 恢复原始placeholder */
       this.setAttribute('placeholder', originalPlaceholder);
     }
     validateInput(this.value, `${id}-error`);
@@ -229,10 +234,10 @@ function calculateJiaBao() {
     }
   });
   
-  // 添加焦点事件
+  /* 添加焦点事件 */
   input.addEventListener('focus', function() {
     this.classList.add('focused');
-    // 聚焦时也清除错误状态
+    /* 聚焦时也清除错误状态 */
     if (this.value) {
       this.classList.remove('error-input');
       this.setAttribute('placeholder', originalPlaceholder);
@@ -244,16 +249,16 @@ function calculateJiaBao() {
   });
 });
 
-// 加包计算器的输入监听
+/* 加包计算器的输入监听 */
 ['jiaBaoAmount', 'newPackage'].forEach((id) => {
   const input = document.getElementById(id);
   const originalPlaceholder = input.getAttribute('placeholder');
   
   input.addEventListener('input', function () {
-    // 当用户开始输入时，清除错误状态
+    /* 当用户开始输入时，清除错误状态 */
     if (this.value) {
       this.classList.remove('error-input');
-      // 恢复原始placeholder
+      /* 恢复原始placeholder */
       this.setAttribute('placeholder', originalPlaceholder);
     }
     validateInput(this.value, `${id}-error`);
@@ -265,10 +270,10 @@ function calculateJiaBao() {
     }
   });
   
-  // 添加焦点事件
+  /* 添加焦点事件 */
   input.addEventListener('focus', function() {
     this.classList.add('focused');
-    // 聚焦时也清除错误状态
+    /* 聚焦时也清除错误状态 */
     if (this.value) {
       this.classList.remove('error-input');
       this.setAttribute('placeholder', originalPlaceholder);
@@ -280,7 +285,7 @@ function calculateJiaBao() {
   });
 });
 
-// 优化移动端点击延迟
+/* 优化移动端点击延迟 */
 document.getElementById('calcButton').addEventListener('click', function () {
   calculate('tiZhi');
 });
@@ -299,28 +304,28 @@ document.getElementById('calcButtonJiaBao').addEventListener('touchstart', funct
   calculate('jiaBao');
 });
 
-// 角色选择和持久化
+/* 角色选择和持久化 */
 const roleSelect = document.getElementById('roleSelect');
 
-// 从localStorage加载保存的角色
+/* 从localStorage加载保存的角色 */
 const savedRole = localStorage.getItem('selectedRole');
 if (savedRole) {
   roleSelect.value = savedRole;
 }
 
-// 从localStorage加载FTTR勾选状态
+/* 从localStorage加载FTTR勾选状态 */
 const fttrCheckbox = document.getElementById('fttrCheckbox');
 const fttrCheckboxJiaBao = document.getElementById('fttrCheckboxJiaBao');
 const fttrOption = document.getElementById('fttrOption');
 const fttrOptionJiaBao = document.getElementById('fttrOptionJiaBao');
 
-// 默认勾选
+/* 默认勾选 */
 fttrCheckbox.checked = true;
 fttrCheckboxJiaBao.checked = true;
 fttrOption.classList.add('checked');
 fttrOptionJiaBao.classList.add('checked');
 
-// 更新提示信息显示状态和内容
+/* 更新提示信息显示状态和内容 */
 function updateTipVisibility() {
   const currentRole = document.getElementById('roleSelect').value;
   const tiZhiTip = document.getElementById('tiZhiTip');
@@ -350,16 +355,16 @@ function updateTipVisibility() {
   }
 }
 
-// 初始化时更新提示
+/* 初始化时更新提示 */
 updateTipVisibility();
 
-// 角色选择变化时更新提示和重新计算
+/* 角色选择变化时更新提示和重新计算 */
 roleSelect.addEventListener('change', function () {
   localStorage.setItem('selectedRole', this.value);
   updateTipVisibility();
-  // 获取当前激活的标签页
+  /* 获取当前激活的标签页 */
   const activeTab = document.querySelector('.tab.active').getAttribute('data-tab');
-  // 只在已经进行过计算时才重新计算
+  /* 只在已经进行过计算时才重新计算 */
   if (activeTab === 'tiZhi') {
     if (hasCalculatedTiZhi) {
       calculateTiZhi();
@@ -371,11 +376,11 @@ roleSelect.addEventListener('change', function () {
   }
 });
 
-// FTTR勾选框变化事件
+/* FTTR勾选框变化事件 */
 fttrCheckbox.addEventListener('change', function () {
   fttrCheckboxJiaBao.checked = this.checked;
   
-  // 更新选中态样式
+  /* 更新选中态样式 */
   if (this.checked) {
     fttrOption.classList.add('checked');
     fttrOptionJiaBao.classList.add('checked');
@@ -385,7 +390,7 @@ fttrCheckbox.addEventListener('change', function () {
   }
   
   updateTipVisibility();
-  // 只在已经进行过计算时才重新计算
+  /* 只在已经进行过计算时才重新计算 */
   const activeTab = document.querySelector('.tab.active').getAttribute('data-tab');
   if (activeTab === 'tiZhi') {
     if (hasCalculatedTiZhi) {
@@ -398,11 +403,11 @@ fttrCheckbox.addEventListener('change', function () {
   }
 });
 
-// 加包计算器FTTR勾选框变化事件
+/* 加包计算器FTTR勾选框变化事件 */
 fttrCheckboxJiaBao.addEventListener('change', function () {
   fttrCheckbox.checked = this.checked;
   
-  // 更新选中态样式
+  /* 更新选中态样式 */
   if (this.checked) {
     fttrOption.classList.add('checked');
     fttrOptionJiaBao.classList.add('checked');
@@ -412,7 +417,7 @@ fttrCheckboxJiaBao.addEventListener('change', function () {
   }
   
   updateTipVisibility();
-  // 只在已经进行过计算时才重新计算
+  /* 只在已经进行过计算时才重新计算 */
   const activeTab = document.querySelector('.tab.active').getAttribute('data-tab');
   if (activeTab === 'tiZhi') {
     if (hasCalculatedTiZhi) {
@@ -425,7 +430,7 @@ fttrCheckboxJiaBao.addEventListener('change', function () {
   }
 });
 
-// 添加涟漪效果
+/* 添加涟漪效果 */
 function createRipple(event) {
   const button = event.currentTarget;
   const ripple = document.createElement('span');
@@ -449,13 +454,13 @@ function createRipple(event) {
   button.appendChild(ripple);
 }
 
-// 为所有按钮添加涟漪效果
+/* 为所有按钮添加涟漪效果 */
 const buttons = document.getElementsByTagName('button');
 for (const button of buttons) {
   button.addEventListener('click', createRipple);
 }
 
-// 为FTTR选项标签添加涟漪效果
+/* 为FTTR选项标签添加涟漪效果 */
 const fttrLabels = document.querySelectorAll('.fttr-option');
 fttrLabels.forEach((label) => {
   label.addEventListener('click', function (e) {
@@ -479,7 +484,7 @@ fttrLabels.forEach((label) => {
 
     this.appendChild(ripple);
 
-    // 300ms后移除涟漪效果
+    /* 300ms后移除涟漪效果 */
     setTimeout(() => {
       ripple.remove();
     }, 600);
