@@ -432,15 +432,11 @@ roleSelect.addEventListener('change', function () {
 
 /* FTTR勾选框变化事件 */
 fttrCheckbox.addEventListener('change', function () {
-  fttrCheckboxJiaBao.checked = this.checked;
-  
   /* 更新选中态样式 */
   if (this.checked) {
     fttrOption.classList.add('checked');
-    fttrOptionJiaBao.classList.add('checked');
   } else {
     fttrOption.classList.remove('checked');
-    fttrOptionJiaBao.classList.remove('checked');
   }
   
   updateTipVisibility();
@@ -449,35 +445,23 @@ fttrCheckbox.addEventListener('change', function () {
   if (activeTab === 'tiZhi') {
     if (hasCalculatedTiZhi) {
       calculateTiZhi();
-    }
-  } else {
-    if (hasCalculatedJiaBao) {
-      calculateJiaBao();
     }
   }
 });
 
 /* 加包计算器FTTR勾选框变化事件 */
 fttrCheckboxJiaBao.addEventListener('change', function () {
-  fttrCheckbox.checked = this.checked;
-  
   /* 更新选中态样式 */
   if (this.checked) {
-    fttrOption.classList.add('checked');
     fttrOptionJiaBao.classList.add('checked');
   } else {
-    fttrOption.classList.remove('checked');
     fttrOptionJiaBao.classList.remove('checked');
   }
   
   updateTipVisibility();
   /* 只在已经进行过计算时才重新计算 */
   const activeTab = document.querySelector('.tab.active').getAttribute('data-tab');
-  if (activeTab === 'tiZhi') {
-    if (hasCalculatedTiZhi) {
-      calculateTiZhi();
-    }
-  } else {
+  if (activeTab === 'jiaBao') {
     if (hasCalculatedJiaBao) {
       calculateJiaBao();
     }
