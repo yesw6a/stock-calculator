@@ -265,7 +265,7 @@ function calculateJiaBao() {
   let finalCommission = commission + extraIncentive;
   if (usedNewPackageCommission) {
     multiple = commission / amount;
-    document.getElementById('resultJiaBao').innerHTML = `<span class=\"max-incentive\">${formatNumber(finalCommission.toFixed(1))}（已达最大激励）</span>`;
+    document.getElementById('resultJiaBao').innerHTML = `${formatNumber(finalCommission.toFixed(1))}<span class=\"max-incentive\">（已达最大激励）</span>`;
   } else {
     multiple = commission / amount;
     document.getElementById('resultJiaBao').textContent = formatNumber(finalCommission.toFixed(1));
@@ -427,16 +427,21 @@ function updateTipVisibility() {
     fttrOptionJiaBao.style.display = 'none';
   } else {
     const fttrChecked = document.getElementById('fttrCheckbox').checked;
+    const fttrCheckedJiaBao = document.getElementById('fttrCheckboxJiaBao').checked;
     fttrOption.style.display = 'flex';
     fttrOptionJiaBao.style.display = 'flex';
 
     if (fttrChecked) {
       tiZhiTip.textContent = `已包含${EXTRA_INCENTIVE.非装维.fttrChecked}元FTTR激励`;
-      jiaBaoTip.textContent = `已包含${EXTRA_INCENTIVE.非装维.fttrChecked}元FTTR激励`;
       tiZhiTip.classList.add('show');
-      jiaBaoTip.classList.add('show');
     } else {
       tiZhiTip.classList.remove('show');
+    }
+
+    if (fttrCheckedJiaBao) {
+      jiaBaoTip.textContent = `已包含${EXTRA_INCENTIVE.非装维.fttrChecked}元FTTR激励`;
+      jiaBaoTip.classList.add('show');
+    } else {
       jiaBaoTip.classList.remove('show');
     }
   }
