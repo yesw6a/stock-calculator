@@ -428,20 +428,30 @@ function updateTipVisibility() {
   } else {
     const fttrChecked = document.getElementById('fttrCheckbox').checked;
     const fttrCheckedJiaBao = document.getElementById('fttrCheckboxJiaBao').checked;
-    fttrOption.style.display = 'flex';
-    fttrOptionJiaBao.style.display = 'flex';
+    
+    // 根据FTTR激励值决定是否显示FTTR选项
+    if (EXTRA_INCENTIVE.非装维.fttrChecked > 0) {
+      fttrOption.style.display = 'flex';
+      fttrOptionJiaBao.style.display = 'flex';
+      
+      if (fttrChecked) {
+        tiZhiTip.textContent = `已包含${EXTRA_INCENTIVE.非装维.fttrChecked}元FTTR激励`;
+        tiZhiTip.classList.add('show');
+      } else {
+        tiZhiTip.classList.remove('show');
+      }
 
-    if (fttrChecked && EXTRA_INCENTIVE.非装维.fttrChecked > 0) {
-      tiZhiTip.textContent = `已包含${EXTRA_INCENTIVE.非装维.fttrChecked}元FTTR激励`;
-      tiZhiTip.classList.add('show');
+      if (fttrCheckedJiaBao) {
+        jiaBaoTip.textContent = `已包含${EXTRA_INCENTIVE.非装维.fttrChecked}元FTTR激励`;
+        jiaBaoTip.classList.add('show');
+      } else {
+        jiaBaoTip.classList.remove('show');
+      }
     } else {
+      // 如果FTTR激励值为0，隐藏FTTR选项
+      fttrOption.style.display = 'none';
+      fttrOptionJiaBao.style.display = 'none';
       tiZhiTip.classList.remove('show');
-    }
-
-    if (fttrCheckedJiaBao && EXTRA_INCENTIVE.非装维.fttrChecked > 0) {
-      jiaBaoTip.textContent = `已包含${EXTRA_INCENTIVE.非装维.fttrChecked}元FTTR激励`;
-      jiaBaoTip.classList.add('show');
-    } else {
       jiaBaoTip.classList.remove('show');
     }
   }
