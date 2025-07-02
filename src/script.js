@@ -29,7 +29,7 @@ document.addEventListener(
 export const EXTRA_INCENTIVE = {
   非装维:{
     /** 加装FTTR */
-    fttrChecked: 40
+    fttrChecked: 0
   }
 };
 
@@ -431,14 +431,14 @@ function updateTipVisibility() {
     fttrOption.style.display = 'flex';
     fttrOptionJiaBao.style.display = 'flex';
 
-    if (fttrChecked) {
+    if (fttrChecked && EXTRA_INCENTIVE.非装维.fttrChecked > 0) {
       tiZhiTip.textContent = `已包含${EXTRA_INCENTIVE.非装维.fttrChecked}元FTTR激励`;
       tiZhiTip.classList.add('show');
     } else {
       tiZhiTip.classList.remove('show');
     }
 
-    if (fttrCheckedJiaBao) {
+    if (fttrCheckedJiaBao && EXTRA_INCENTIVE.非装维.fttrChecked > 0) {
       jiaBaoTip.textContent = `已包含${EXTRA_INCENTIVE.非装维.fttrChecked}元FTTR激励`;
       jiaBaoTip.classList.add('show');
     } else {
